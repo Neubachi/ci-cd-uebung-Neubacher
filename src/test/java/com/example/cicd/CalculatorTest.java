@@ -1,10 +1,10 @@
 package com.example.cicd;
 
-import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 /**
  * Hinweise:
@@ -33,4 +33,16 @@ class CalculatorTest {
         List<Integer> nums = Arrays.asList(1, 2, 3, null, 4);
         assertEquals(c.sumUp(nums), c.addAll(nums));
     }
-}
+
+    @Test
+    void sub_minusBiggerNumber(){
+        Calculator c = new Calculator();
+        assertEquals(-1, c.subtract(2, 3));
+    }
+
+    @Test
+    void add_withNegativeNumbers(){
+        Calculator c = new Calculator();
+        assertEquals(-3, c.add(2, -5));
+    }
+ }
