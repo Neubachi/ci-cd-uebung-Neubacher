@@ -284,5 +284,5 @@ mvn -q -DskipTests=false test
 
 
 ## Übung 1
-- Autor: <Fabian Neubacher>
-- Besonderheit: <Ich habe bisher noch nicht so viel Erfahrung mit Git am meisten gelernt habe ich bisher in meinem letzten Ferialjob bei der Porsche-Informatik>
+- Autor: Fabian Neubacher
+- Besonderheit: Ich habe bisher noch nicht so viel Erfahrung mit Git am meisten gelernt habe ich bisher in meinem letzten Ferialjob bei der Porsche-Informatik
