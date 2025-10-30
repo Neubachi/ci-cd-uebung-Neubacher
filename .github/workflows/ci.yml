@@ -53,7 +53,7 @@ jobs:
           # projectKey: your_org_your_project
           # organization: your_org 
           args: >
-             -Dsonar.projectKey=neubachi_ci-cd-uebung-Neubacher
+             -Dsonar.projectKey=Neubachi_ci-cd-uebung-Neubacher
              -Dsonar.organization=neubachi
              -Dsonar.branch.name=main  
              -Dsonar.java.binaries=target/classes
