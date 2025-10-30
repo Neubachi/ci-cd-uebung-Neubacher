@@ -54,7 +54,7 @@ jobs:
           # organization: your_org 
           args: >
              -Dsonar.projectKey=Neubachi_ci-cd-uebung-Neubacher
-             -Dsonar.organization=neubachi
+             -Dsonar.organization=neubachi170503
              -Dsonar.branch.name=main  
              -Dsonar.java.binaries=target/classes
              -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
