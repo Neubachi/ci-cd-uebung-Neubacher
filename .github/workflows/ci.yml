@@ -16,15 +16,25 @@ concurrency:
 
 jobs:
   build-test-analyze:
-    name: "Build, Test, Analyze"
-    runs-on: ubuntu-latest
+    name: "Build, Test, Analyze (${{ matrix.os }}, JDK ${{ matrix.java }})"
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        java: [17, 21]
+        exclude:
+          - os: windows-latest
+            java: 21   # excluded combination, required by exercise
+
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: ${{ matrix.java }}
           cache: maven
 
       - name: Build & Test (with coverage)
@@ -34,27 +44,25 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: surefire-reports
+          name: surefire-${{ matrix.os }}-jdk${{ matrix.java }}
           path: target/surefire-reports
 
       - name: Upload JaCoCo HTML (optional)
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: jacoco-site
+          name: jacoco-${{ matrix.os }}-jdk${{ matrix.java }}
           path: target/site/jacoco
 
       - name: SonarCloud Scan
+        if: matrix.os == 'ubuntu-latest' && matrix.java == 17
         uses: SonarSource/sonarcloud-github-action@v2
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
-          # explicit params if auto-detect fails:
-          # projectKey: your_org_your_project
-          # organization: your_org 
           args: >
-             -Dsonar.projectKey=Neubachi_ci-cd-uebung-Neubacher
-             -Dsonar.organization=neubachi170503
-             -Dsonar.branch.name=main  
-             -Dsonar.java.binaries=target/classes
-             -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+            -Dsonar.projectKey=Neubachi_ci-cd-uebung-Neubacher
+            -Dsonar.organization=neubachi170503
+            -Dsonar.branch.name=main
+            -Dsonar.java.binaries=target/classes
+            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
