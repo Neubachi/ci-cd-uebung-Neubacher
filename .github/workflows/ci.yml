@@ -1,5 +1,21 @@
-- name: Setup Temurin JDK
-  uses: actions/setup-java@v4
-  with:
-    distribution: temurin
-    java-version: ${{ matrix.java }}
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Temurin JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Build and Test
+        run: mvn -B -DskipTests=false test
