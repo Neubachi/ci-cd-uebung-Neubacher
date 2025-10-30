@@ -3,18 +3,23 @@ package com.example.cicd;
 public class TextUtils {
 
     public static boolean isPalindrome(String input) {
-        if (input == null) return false;
-        String reversed = new StringBuilder(input).reverse().toString();
-        return input.toLowerCase() == reversed.toLowerCase(); // absichtlich falsch
-    }
+    if (input == null) return false;
 
-    // Leerer Catch-Block + sehr generische Exception
-    public static int safeParseInt(String s) {
-        try {
-            return Integer.parseInt(s);
-        } catch (Exception e) { 
-            // absichtlich leer gelassen
-        }
-        return 0; // „Fallback“ – diskutabel
+    String lower = input.toLowerCase();
+    String reversed = new StringBuilder(lower).reverse().toString();
+
+    return lower.equals(reversed);
+}
+
+
+public static int safeParseInt(String s) {
+    try {
+        return Integer.parseInt(s);
+    } catch (NumberFormatException e) {
+        // Log-Nachricht oder sinnvolle Reaktion:
+        System.err.println("Invalid integer input: " + s);
+        return 0; // Rückgabewert bei ungültiger Zahl
     }
+}
+
 }
