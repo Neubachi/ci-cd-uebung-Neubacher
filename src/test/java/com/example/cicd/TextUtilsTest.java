@@ -12,17 +12,17 @@ import org.junit.jupiter.api.Test;
 class TextUtilsTest {
 
     @Test
-    void safeParseInt_validNumber_returnsValue() {
+    void safeParseIntValidNumberReturnsValue() {
         assertEquals(42, TextUtils.safeParseInt("42"));
     }
 
     @Test
-    void safeParseInt_invalidNumber_returnsZero() {
+    void safeParseIntInvalidNumberReturnsZero() {
         assertEquals(0, TextUtils.safeParseInt("x"));
     }
 
     @Test
-    void isPalindrome_caseInsensitive_expectedTrue() {
+    void isPalindromeCaseInsensitiveExpectedTrue() {
         assertTrue(TextUtils.isPalindrome("Anna"));
     }
 }

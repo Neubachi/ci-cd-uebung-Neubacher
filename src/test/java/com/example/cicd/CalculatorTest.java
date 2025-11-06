@@ -14,34 +14,35 @@ import org.junit.jupiter.api.Test;
 class CalculatorTest {
 
     @Test
-    void add_shouldSumTwoIntegers() {
+    void addShouldSumTwoIntegers() {
         Calculator c = new Calculator();
         assertEquals(5, c.add(2, 3));
-        // TODO: weitere Grenzfälle (z. B. negative Zahlen)
+        assertEquals(-3, c.add(-1, -2));        // beide negativ
+        assertEquals(0, c.add(5, -5)); 
     }
 
     @Test
-    void divide_byZero_shouldReturnZero_currentBehavior() {
+    void divideByZeroShouldReturnZeroCurrentBehavior() {
         Calculator c = new Calculator();
         // Aktuelles (schlechtes) Verhalten absichtlich bestätigt – Refactoring in Ü2
         assertEquals(0, c.divide(10, 0));
     }
 
     @Test
-    void sum_methods_shouldProduceSameResult() {
+    void sumMethodsShouldProduceSameResult() {
         Calculator c = new Calculator();
         List<Integer> nums = Arrays.asList(1, 2, 3, null, 4);
         assertEquals(c.sumUp(nums), c.addAll(nums));
     }
 
     @Test
-    void sub_minusBiggerNumber(){
+    void subMinusBiggerNumber(){
         Calculator c = new Calculator();
         assertEquals(-1, c.subtract(2, 3));
     }
 
     @Test
-    void add_withNegativeNumbers(){
+    void addWithNegativeNumbers(){
         Calculator c = new Calculator();
         assertEquals(-3, c.add(2, -5));
     }

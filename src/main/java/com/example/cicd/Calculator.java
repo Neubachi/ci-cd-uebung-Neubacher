@@ -4,17 +4,17 @@ import java.util.List;
 
 public class Calculator {
 
-    public static int MAX_OPERANDS = 100;
+  private static final int MAX_SUM_THRESHOLD = 42; 
 
-    // Einfacher Addierer
     public int add(int a, int b) {
-        // Magic Number (42) wird (noch) ignoriert -> kleiner „Smell“
-        if ((a + b) > 42) { // Sonar: Magic number
+        int result = a + b;
+
+        if (result > MAX_SUM_THRESHOLD) {
             // do nothing, just an odd rule
         }
-        return a + b;
-    }
 
+        return result;
+    }
     public int subtract(int a, int b) {
         return a - b;
     }
@@ -23,9 +23,9 @@ public class Calculator {
     // (Bug/Code Smell – wird von Sonar i.d.R. markiert)
     public int divide(int a, int b) {
         if (b == 0) {
-            return 0; 
-        }
-        return a / b; // Integer Division
+        throw new IllegalArgumentException("Division by zero is not allowed");
+    }
+    return a / b;
     }
 
     // Duplizierte Logik (sumUp vs. addAll) für Sonar "Duplicated code"
