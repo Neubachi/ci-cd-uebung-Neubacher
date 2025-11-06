@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -23,9 +24,10 @@ class CalculatorTest {
 
     @Test
     void divideByZeroShouldReturnZeroCurrentBehavior() {
-        Calculator c = new Calculator();
-        // Aktuelles (schlechtes) Verhalten absichtlich bestätigt – Refactoring in Ü2
-        assertEquals(0, c.divide(10, 0));
+         Calculator c = new Calculator();
+    // Erwartet, dass eine IllegalArgumentException geworfen wird,
+    // wenn versucht wird, durch 0 zu dividieren.
+    assertThrows(IllegalArgumentException.class, () -> c.divide(10, 0));
     }
 
     @Test
