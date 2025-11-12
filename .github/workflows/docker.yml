@@ -1,4 +1,4 @@
-name: Exercise03 - Docker Build
+name: Exercise03 - Full CI Integration
 
 on:
   push:
@@ -7,30 +7,60 @@ on:
     branches: [ main ]
 
 jobs:
-  build-and-docker:
+  # ==============================
+  # 1. Maven Test Job
+  # ==============================
+  test:
+    name: Run Maven Tests
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: Set up JDK 17 (Temurin)
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
 
-      - name: Build with Maven
+      - name: Run Maven tests with coverage
+        run: mvn -B test
+
+  # ==============================
+  # 2. Docker Build & Upload Job
+  # ==============================
+  docker:
+    name: Build & Upload Docker Image
+    runs-on: ubuntu-latest
+    needs: test  
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Build project with Maven
         run: mvn -B -DskipTests=false package
 
-      - name: Build Docker image
-        run: docker build -t ci-cd-app:latest .
+      - name: Extract short commit SHA
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
-      - name: Save Docker image as artifact
-        run: docker save ci-cd-app:latest -o ci-cd-app.tar
+      - name: Build Docker image with commit tag
+        run: docker build -t neubachi/ci-cd-uebung:${{ env.sha_short }} .
+
+      - name: Save Docker image as tar artifact
+        run: docker save neubachi/ci-cd-uebung:${{ env.sha_short }} -o docker-image-${{ env.sha_short }}.tar
 
       - name: Upload Docker image artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ci-cd-app-image
-          path: ci-cd-app.tar
+          name: docker-image-${{ env.sha_short }}
+          path: docker-image-${{ env.sha_short }}.tar
+
