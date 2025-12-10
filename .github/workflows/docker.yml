@@ -76,6 +76,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Extract short commit SHA
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
       - name: Download Docker image artifact
         uses: actions/download-artifact@v4
         with:
@@ -102,6 +105,7 @@ jobs:
           name: grype-report
           path: grype-report.json
 
+
   # ==============================
   # 4. Trivy Vulnerability Scan
   # ==============================
@@ -113,6 +117,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Extract short commit SHA
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
       - name: Download Docker image artifact
         uses: actions/download-artifact@v4
