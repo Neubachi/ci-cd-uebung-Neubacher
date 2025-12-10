@@ -54,15 +54,18 @@ jobs:
           name: jacoco-${{ matrix.os }}-jdk${{ matrix.java }}
           path: target/site/jacoco
 
-      - name: SonarCloud Scan
-        if: matrix.os == 'ubuntu-latest' && matrix.java == 17
-        uses: SonarSource/sonarcloud-github-action@v2
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.projectKey=Neubachi_ci-cd-uebung-Neubacher
-            -Dsonar.organization=neubachi170503
-            -Dsonar.branch.name=main
-            -Dsonar.java.binaries=target/classes
-            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+# auskommentiert weil sonar immer coverage probleme  hatte 
+# Mit Herrn Kurz besprochen 
+
+      # - name: SonarCloud Scan
+      #   if: matrix.os == 'ubuntu-latest' && matrix.java == 17
+      #   uses: SonarSource/sonarcloud-github-action@v2
+      #   env:
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #   with:
+      #     args: >
+      #       -Dsonar.projectKey=Neubachi_ci-cd-uebung-Neubacher
+      #       -Dsonar.organization=neubachi170503
+      #       -Dsonar.branch.name=main
+      #       -Dsonar.java.binaries=target/classes
+      #       -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
