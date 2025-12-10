@@ -3,10 +3,22 @@ FROM maven:3.9-eclipse-temurin-17 AS build
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
-RUN mvn -B -DskipTests=false package && echo "=== Inhalt von /app/target ===" && ls -la /app/target
+RUN mvn -B -DskipTests=false package \
+ && echo "=== Inhalt von /app/target ===" \
+ && ls -la /app/target
 
-# ===== STAGE 2: Runtime =====
-FROM eclipse-temurin:17-jre
+# ===== STAGE 2: Runtime (verwundbar für Exercise 04 Teil C) =====
+FROM openjdk:11-jre-slim
+
+# absichtlich unsichere Pakete installieren für Exercise 04 Teil C
+RUN apt-get update && apt-get install -y \
+    wget \
+    curl \
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
-COPY --from=build /app/target/ci-cd-uebung-1.0.0.jar /app/app.jar
+
+COPY --from=build /app/target/*.jar /app/app.jar
+
 ENTRYPOINT ["java","-jar","/app/app.jar"]
