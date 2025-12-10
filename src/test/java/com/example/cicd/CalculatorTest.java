@@ -7,27 +7,40 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
-/**
- * Hinweise:
- * - Ergänze weitere Testfälle (z. B. negative Zahlen, große Werte)
- * - Diskutiere das Verhalten von divide(… , 0) und entscheide in Ü2, ob Exception sinnvoller ist
- */
 class CalculatorTest {
 
     @Test
     void addShouldSumTwoIntegers() {
         Calculator c = new Calculator();
         assertEquals(5, c.add(2, 3));
-        assertEquals(-3, c.add(-1, -2));        // beide negativ
-        assertEquals(0, c.add(5, -5)); 
+        assertEquals(-3, c.add(-1, -2));
+        assertEquals(0, c.add(5, -5));
     }
 
     @Test
-    void divideByZeroShouldReturnZeroCurrentBehavior() {
-         Calculator c = new Calculator();
-    // Erwartet, dass eine IllegalArgumentException geworfen wird,
-    // wenn versucht wird, durch 0 zu dividieren.
-    assertThrows(IllegalArgumentException.class, () -> c.divide(10, 0));
+    void addOverThresholdStillReturnsResult() {
+        Calculator c = new Calculator();
+        assertEquals(50, c.add(30, 20));  // >42 -> Branch wird ausgeführt
+    }
+
+    @Test
+    void subtractVariousCases() {
+        Calculator c = new Calculator();
+        assertEquals(1, c.subtract(5, 4));
+        assertEquals(-10, c.subtract(-5, 5));
+        assertEquals(0, c.subtract(3, 3));
+    }
+
+    @Test
+    void divideNormal() {
+        Calculator c = new Calculator();
+        assertEquals(5, c.divide(10, 2));
+    }
+
+    @Test
+    void divideByZeroShouldThrow() {
+        Calculator c = new Calculator();
+        assertThrows(IllegalArgumentException.class, () -> c.divide(10, 0));
     }
 
     @Test
@@ -38,14 +51,16 @@ class CalculatorTest {
     }
 
     @Test
-    void subMinusBiggerNumber(){
+    void sumUpHandlesNullValues() {
         Calculator c = new Calculator();
-        assertEquals(-1, c.subtract(2, 3));
+        List<Integer> nums = Arrays.asList(null, null, 5);
+        assertEquals(5, c.sumUp(nums));
     }
 
     @Test
-    void addWithNegativeNumbers(){
+    void addAllHandlesNullValues() {
         Calculator c = new Calculator();
-        assertEquals(-3, c.add(2, -5));
+        List<Integer> nums = Arrays.asList(1, null, 1);
+        assertEquals(2, c.addAll(nums));
     }
- }
+}

@@ -6,7 +6,7 @@ COPY src ./src
 RUN mvn -B -DskipTests=false package && echo "=== Inhalt von /app/target ===" && ls -la /app/target
 
 # ===== STAGE 2: Runtime =====
-FROM FROM eclipse-temurin:17-jre
+FROM eclipse-temurin:17-jre
 WORKDIR /app
 COPY --from=build /app/target/ci-cd-uebung-1.0.0.jar /app/app.jar
 ENTRYPOINT ["java","-jar","/app/app.jar"]

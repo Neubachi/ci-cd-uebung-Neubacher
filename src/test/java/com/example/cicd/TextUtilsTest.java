@@ -1,14 +1,10 @@
 package com.example.cicd;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
-/**
- * Hinweis:
- * - Dieser Test wird voraussichtlich FAILEN, weil isPalindrome '==' nutzt.
- * - In Uebung 2 sollte dieser Bug gefixt werden.
- */
 class TextUtilsTest {
 
     @Test
@@ -22,7 +18,32 @@ class TextUtilsTest {
     }
 
     @Test
-    void isPalindromeCaseInsensitiveExpectedTrue() {
+    void safeParseIntNullReturnsZero() {
+        assertEquals(0, TextUtils.safeParseInt(null));
+    }
+
+    @Test
+    void isPalindromeCaseInsensitive() {
         assertTrue(TextUtils.isPalindrome("Anna"));
+    }
+
+    @Test
+    void isPalindromeReturnsFalseForNonPalindrome() {
+        assertFalse(TextUtils.isPalindrome("Test"));
+    }
+
+    @Test
+    void isPalindromeReturnsFalseOnNull() {
+        assertFalse(TextUtils.isPalindrome(null));
+    }
+
+    @Test
+    void isPalindromeWorksWithSingleCharacter() {
+        assertTrue(TextUtils.isPalindrome("a"));
+    }
+
+    @Test
+    void isPalindromeEmptyStringShouldBePalindrome() {
+        assertTrue(TextUtils.isPalindrome(""));
     }
 }
