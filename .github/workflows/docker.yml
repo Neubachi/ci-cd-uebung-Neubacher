@@ -106,9 +106,6 @@ jobs:
           path: grype-report.json
 
 
-  # ==============================
-  # 4. Trivy Vulnerability Scan
-  # ==============================
   trivy-scan:
     name: Trivy Vulnerability Scan
     runs-on: ubuntu-latest
@@ -135,10 +132,11 @@ jobs:
       - name: Install Trivy
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y wget tar
-          wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_Linux-64bit.tar.gz
-          tar -xzf trivy_Linux-64bit.tar.gz
-          sudo mv trivy /usr/local/bin/
+          sudo apt-get install -y wget apt-transport-https gnupg lsb-release
+          wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+          echo "deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/trivy.list
+          sudo apt-get update -y
+          sudo apt-get install -y trivy
 
       - name: Run Trivy scan (JSON)
         run: |
