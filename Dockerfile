@@ -8,7 +8,7 @@ RUN mvn -B -DskipTests=false package \
  && ls -la /app/target
 
 # ===== STAGE 2: Runtime (verwundbar für Exercise 04 Teil C) =====
-FROM openjdk:11-jre-slim
+FROM eclipse-temurin:11-jre
 
 # absichtlich unsichere Pakete installieren für Exercise 04 Teil C
 RUN apt-get update && apt-get install -y \
