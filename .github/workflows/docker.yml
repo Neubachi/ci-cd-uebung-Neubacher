@@ -1,4 +1,4 @@
-name: Exercise03 - Full CI Integration
+name: Exercise04 - Full CI Integration
 
 on:
   push:
@@ -8,10 +8,10 @@ on:
 
 jobs:
   # ==============================
-  # 1. Maven Test Job
+  # 1. Maven Test + JaCoCo Coverage
   # ==============================
   test:
-    name: Run Maven Tests
+    name: Run Maven Tests + JaCoCo Coverage
     runs-on: ubuntu-latest
 
     steps:
@@ -24,8 +24,21 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Run Maven tests with coverage
-        run: mvn -B test
+      - name: Run Tests + Generate JaCoCo report
+        run: mvn -B clean test jacoco:report
+
+      - name: Upload JaCoCo HTML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-html-report
+          path: target/site/jacoco/
+
+      - name: Upload JaCoCo XML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-xml-report
+          path: target/site/jacoco/jacoco.xml
+
 
   # ==============================
   # 2. Docker Build & Upload Job
@@ -39,7 +52,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up JDK 17 (Temurin)
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -49,7 +62,6 @@ jobs:
         run: mvn -B -DskipTests=false package
 
       - name: Extract short commit SHA
-        id: vars
         run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
       - name: Build Docker image with commit tag
@@ -63,7 +75,8 @@ jobs:
         with:
           name: docker-image-${{ env.sha_short }}
           path: docker-image-${{ env.sha_short }}.tar
-          
+
+
   # ==============================
   # 3. Grype Vulnerability Scan
   # ==============================
@@ -106,6 +119,9 @@ jobs:
           path: grype-report.json
 
 
+  # ==============================
+  # 4. Trivy Vulnerability Scan
+  # ==============================
   trivy-scan:
     name: Trivy Vulnerability Scan
     runs-on: ubuntu-latest
