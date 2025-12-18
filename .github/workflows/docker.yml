@@ -164,3 +164,46 @@ jobs:
         with:
           name: trivy-report
           path: trivy-report.json
+
+
+  # ==============================
+  # 4. Trivy Vulnerability Scan with failure
+  # ==============================
+
+    trivy-scan-strict:
+    name: Trivy Vulnerability Scan (Fail on HIGH / CRITICAL)
+    runs-on: ubuntu-latest
+    needs: docker
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract short commit SHA
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: Download Docker image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image-${{ env.sha_short }}
+          path: ./image
+
+      - name: Load Docker image
+        run: |
+          docker load -i ./image/docker-image-${{ env.sha_short }}.tar
+
+      - name: Install Trivy
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y wget apt-transport-https gnupg lsb-release
+          wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+          echo "deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/trivy.list
+          sudo apt-get update -y
+          sudo apt-get install -y trivy
+
+      - name: Run Trivy scan (fail on HIGH / CRITICAL)
+        run: |
+          trivy image \
+            --severity HIGH,CRITICAL \
+            --exit-code 1 \
+            neubachi/ci-cd-uebung:${{ env.sha_short }}
