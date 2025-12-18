@@ -171,7 +171,7 @@ jobs:
   # ==============================
 
   trivy-scan-strict:
-    name: Trivy Vulnerability Scan (Fail on HIGH / CRITICAL)
+    name: Trivy Vulnerability Scan (Fail on MEDIUM /HIGH / CRITICAL)
     runs-on: ubuntu-latest
     needs: docker
 
@@ -201,9 +201,9 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y trivy
 
-      - name: Run Trivy scan (fail on HIGH / CRITICAL)
+      - name: Run Trivy scan (fail on MEDIUM /HIGH / CRITICAL)
         run: |
           trivy image \
-            --severity HIGH,CRITICAL \
+            --severity MEDIUM,HIGH,CRITICAL \
             --exit-code 1 \
             neubachi/ci-cd-uebung:${{ env.sha_short }}
