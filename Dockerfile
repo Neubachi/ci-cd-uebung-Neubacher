@@ -8,9 +8,9 @@ RUN mvn -B -DskipTests=false package \
  && ls -la /app/target
 
 # ===== STAGE 2: Runtime (verwundbar für Exercise 04 Teil C) =====
-FROM eclipse-temurin:11-jre
+FROM eclipse-temurin:11-jre-focal
 
-# absichtlich unsichere Pakete installieren für Exercise 04 Teil C
+# absichtlich unsichere Pakete installieren
 RUN apt-get update && apt-get install -y \
     wget \
     curl \
