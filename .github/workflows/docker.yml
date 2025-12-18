@@ -170,7 +170,7 @@ jobs:
   # 4. Trivy Vulnerability Scan with failure
   # ==============================
 
-    trivy-scan-strict:
+  trivy-scan-strict:
     name: Trivy Vulnerability Scan (Fail on HIGH / CRITICAL)
     runs-on: ubuntu-latest
     needs: docker
