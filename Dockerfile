@@ -7,18 +7,18 @@ RUN mvn -B -DskipTests=false package \
  && echo "=== Inhalt von /app/target ===" \
  && ls -la /app/target
 
-# ===== STAGE 2: Runtime (verwundbar für Exercise 04 Teil C) =====
-FROM openjdk:8-jre
+# ===== STAGE 2: Runtime (Exercise 04 C + D) =====
+FROM eclipse-temurin:11-jre-focal
 
-# absichtlich unsichere Pakete installieren
+# absichtlich verwundbare Pakete
 RUN apt-get update && apt-get install -y \
-    wget \
     curl \
+    wget \
     unzip \
+    libssl1.1 \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
-
 COPY --from=build /app/target/*.jar /app/app.jar
 
 ENTRYPOINT ["java","-jar","/app/app.jar"]
